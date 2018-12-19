@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+#开发配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://140.143.230.126:3306/godzilla?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+    resources:
+  static-locations: classpath:/static/,classpath:/static/,classpath:/resources/,classpath:/META-INF/resources/
+
+
+config:
+  jiraPath:
+  userName:
+  pswd:
+security:
+  basic:
+    enabled: false
+  headers:
+    frame: false
+    resources:
+  static-locations: classpath:/static/,classpath:/static/,classpath:/resources/,classpath:/META-INF/resources/
