@@ -21,7 +21,7 @@ import java.util.List;
  *
  * 定时器
  */
-@Component
+//@Component
 public class Timegrabbing {
     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
