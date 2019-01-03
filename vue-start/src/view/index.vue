@@ -88,7 +88,7 @@ export default {
 
         if(data.name != ''){
 
-          this.$router.push({name: 'main',params:{ name: data.name, usercount: data.count}});
+          this.$router.push({name: 'main',params:{ name: data.name, usercount: data.id}});
 
         }
 

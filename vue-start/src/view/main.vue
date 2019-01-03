@@ -38,7 +38,7 @@
         <Layout>
             <Header :style="{position: 'fixed', width: '100%'}">
                 <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo">【知识图谱系统,大数据推荐,web展示服务,内容标注系统,辅助诊断系统】</div>
+                    <div class="layout-logo" style="color: white">【知识图谱系统,大数据推荐,web展示服务,内容标注系统,辅助诊断系统】</div>
                     <div class="layout-nav">
                         <MenuItem name="1">
                             <Icon type="ios-navigate"></Icon>
