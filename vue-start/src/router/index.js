@@ -20,5 +20,10 @@ export default new Router({
       name:'taskmain', 
       component:async(resolve) => resolve(await import('../view/taskmain'))
     },
+    {
+      path:'/music', 
+      name:'music', 
+      component:async(resolve) => resolve(await import('../view/music'))
+    },
   ]
 })

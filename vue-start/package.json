@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "hls.js": "^0.12.2",
     "iview": "^3.1.5",
     "less": "^3.9.0",
     "vue": "^2.5.2",
+    "vue-aplayer": "^1.6.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

@@ -39,8 +39,8 @@
 
 </style>
 <template>
-    <Tabs >
-        <TabPane label="TaskList" icon="logo-apple">
+    <Tabs value="TaskList">
+        <TabPane label="TaskList" name="TaskList" icon="logo-apple">
             <Scroll :height = '800'>
                 <Collapse class="contents" v-model="value2" accordion>
                     <Panel v-for="item,index in tasks" :key="index"  style="white-space: wrap;font-size:15px;overflow: hidden;text-overflow: ellipsis"> 
@@ -82,28 +82,24 @@
                 </i-circle>
             </div>
         </TabPane>
-        <TabPane label="Muisc" icon="logo-tux">
-            <Input search placeholder="Enter something..." v-model="content" @on-search="loadMusic"/>
-            <Card v-for="item,index in music" :key="index" style="width:100%">
-                <div style="text-align:center">
-                    <img :src="item.pic"/>
-                    <h4><a :href="item.link" target="">{{item.title}}</a>--{{item.author}}</h4>
-                </div>
-            </Card>
-
-        </TabPane>
     </Tabs>
 
 </template>
 <script>
+import aplayer from "vue-aplayer";
 export default {
+  name: "Aplayer",
+  props: ["pdfurl"],
+  components: {
+    //别忘了引入组件
+    aplayer: aplayer
+  },
   data () {
     return {
         value2: '1',
         tasks: [],
         num: 0,
-        music:[],
-        content: ''
+        content: '',
     }
   },
   created() {
@@ -116,6 +112,7 @@ export default {
 
 
   },
+
   methods: {
 
     async load() {
@@ -138,27 +135,6 @@ export default {
         console.info(data);
 
     },
-
-    async loadMusic() {
-        
-        let postData={
-            content: this.content,
-            relation: '',
-            token: ''
-        }
-
-        let { data } = await this.$axios.post(this.$apiTypes.GET_MUSICS, postData);
-
-        
-        if(data != ''){
-
-            this.music = data.data.result;
-        }
-
-        console.info(data);
-
-    },
-
 
     warning (nodesc) {
         this.$Notice.warning({
