@@ -24,34 +24,44 @@
     .layout-footer-center{
         text-align: center;
     }
+    .layout-content{
+        text-align: center;
+        width: 100%;
+        padding-bottom: 60%;
+    }
 </style>
 <template>
     <div class="layout">
-        <Layout>
-            <Header :style="{position: 'fixed', width: '100%'}">
-                <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
-                    <div class="layout-nav">
-                    </div>
-                </Menu>
-            </Header>
-            <Content :style="{margin: '110px 20px 0', background: '#fff', minHeight: '700px'}">
-                <br>
-                <br>
-                <br>
-                <br>
-                <p :style="{margin: '50px 20px 0'}">用-户-名：<Input v-model="username" placeholder="Enter something..." style="width: 300px" /></p>
-                <p></p>
-                <br>
-                <br>
-                <p>密----码：<Input v-model="password" placeholder="Enter something..." style="width: 300px" /></p>
-                <br>
-                <br>
-                <p><Button @click="sign">登 录</Button>&nbsp;&nbsp;&nbsp;&nbsp;<Button @click="cancel">重 置</Button></p>
-                
-            </Content>
-            <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
-        </Layout>
+        <Card :style="conheight">
+            <Layout>
+                <Carousel :height = '200'>
+                    <Carousel-item>
+                        <div class="demo-carousel"><img :src="imgSrc" /></div>
+                    </Carousel-item>
+                    <Carousel-item>
+                        <div class="demo-carousel">2</div>
+                    </Carousel-item>
+                    <Carousel-item>
+                        <div class="demo-carousel">3</div>
+                    </Carousel-item>
+                    <Carousel-item>
+                        <div class="demo-carousel">4</div>
+                    </Carousel-item>
+                </Carousel>
+                <Content class="layout-content">  
+                    <br>
+                    <p>用户名：<Input v-model="username" prefix="ios-contact" size="large" placeholder="Enter something..." style="width: 300px" /></p>
+                    <p></p>
+                    <br>
+                    <br>
+                    <p>密---码：<Input v-model="password" prefix="ios-alert" size="large" placeholder="Enter something..." style="width: 300px" /></p>
+                    <br>
+                    <br>
+                    <p><i-button @click="sign" icon="ios-person" shape="circle" size="large">登 录</i-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button size="large" @click="cancel" icon="ios-trash" shape="circle">重 置</Button></p>
+                </Content>
+                <Footer class="layout-footer-center">2019-2020 &copy; junwang</Footer>
+            </Layout>
+        </Card>
     </div>
 </template>
 <script>
@@ -59,15 +69,25 @@ export default {
   data () {
     return {
         username: '',
-        password: ''
+        password: '',
+        conheight:{
+            height:"",
+        },
+        imgSrc: require("../assets/logo.png")
     }
   },
   created() {
+    window.addEventListener('resize', this.setHeight);
+    this.setHeight();
   },
-  computed:{
-
+  mounted() {
+    this.conheight.height=window.innerHeight-40+"px";
+    //window.innerHeight是浏览器可用高度，this.$refs.table.$el.offsetTop是表格距离浏览器可用高度顶部的距离
   },
   methods: {
+    setHeight(){
+        this.conheight.height = window.innerHeight-40+"px";
+    },
     //获取目录
     async sign() {
         
@@ -97,9 +117,10 @@ export default {
 
     },
     warning (nodesc) {
-        this.$Notice.warning({
-        title: 'Notification title',
-            desc: nodesc ? '' : '用户名或者密码不能为空！ '
+        this.$Notice.error({
+        top: 150,
+        duration: 2,
+        desc: nodesc ? '' : '用户名或者密码不能为空！ '
         });
     },
     cancel(){

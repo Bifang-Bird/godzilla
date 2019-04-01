@@ -1,163 +1,149 @@
-<style lang="less">
-    .demo-Circle-custom{
-        & h1{
-            color: #3f414d;
-            font-size: 28px;
-            font-weight: normal;
-        }
-        & p{
-            color: #657180;
-            font-size: 14px;
-            margin: 10px 0 15px;
-        }
-        & span{
-            display: block;
-            padding-top: 15px;
-            color: #657180;
-            font-size: 14px;
-            &:before{
-                content: '';
-                display: block;
-                width: 50px;
-                height: 1px;
-                margin: 0 auto;
-                background: #e0e3e6;
-                position: relative;
-                top: -15px;
-            };
-        }
-        & span i{
-            font-style: normal;
-            color: #3f414d;
-        }
-    }
-</style>
-<style scoped>
-    .contents{
-        text-align: left 
-    }
-
-</style>
 <template>
-    <div style="padding: 1px 0;">
-            <div style="padding:1px 0;">
-                <aplayer autoplay showlrc='true' :music="musicList">
-                </aplayer>
-            </div>
-            <br>
-            <Input search placeholder="Enter something..." v-model="content" @on-search="loadMusic"/>
-            <Card v-for="item,index in music" :key="index" style="width:100%">
-                <div style="text-align:center">
-                    <img :src="item.pic"/>
-                    <br>
-                    <Button type="primary" ghost @click="player(item.url,item.lrc,item.title,item.author)">{{item.title}}--{{item.author}}</Button>
-                    <!-- <router-link  :to="{path:'/music',query: {music:item.url,lrc: item.lrc, title: item.title,author: item.author}}"  :data-types="item.types" class="link-des" :id='item.id'>{{item.title}}--{{item.author}}</router-link> -->
-                </div>
-            </Card>
-        <br>
-        <br>
-
-        <!-- <ButtonGroup shape="circle">
-            <Button type="primary" @click="$router.back(-1)">
-                <Icon type="ios-arrow-back"></Icon>
-                Backward
-            </Button>
-            <Button type="primary">
-                Forward
-                <Icon type="ios-arrow-forward"></Icon>
-            </Button>
-        </ButtonGroup> -->
-
-    </div>
-    
+<div>
+    <Button @click="value2 = true" shape="circle" size="large">Open</Button>
+    <Drawer title="Basic Drawer" placement="left" :closable="false" v-model="value2">
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+    </Drawer>
+        <Row :style="conheight">
+            <Progress :percent="contentLenght" stroke-width='15' status="active"></Progress>
+            <i-input v-model="contentValue" style="padding:5px;" type="textarea" :on-change="changeContent" :autosize="{minRows: 10,maxRows: 20}" placeholder="Enter something..."></i-input>
+        </Row>
+        <Row :style="{height:'25px'}">
+            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
+            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
+            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
+            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
+            <i-col span="4" style="padding-top:4px"><i-button @click="submit" shape="circle" size="large" icon="ios-checkmark"></i-button></i-col>
+            <i-col span="4" style="padding-top:4px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
+        </Row>
+</div>
 </template>
 <script>
+    export default {
+        data () {
+            return {
+                value2: false,
+                contentHeight: 200,
+        　　　　 conheight:{
+                  height:'',
+                  overflow:false
+                },
+                usercount: '',
+                contentValue: '',
+                contentLenght: 0,
+            }
+        },
+        watch:{
+          contentValue(val){
+            this.contentLenght = this.contentValue.length/2;
+          }
+        },
+        mounted() {
+          this.conheight.height= window.innerHeight-110+"px";
+          this.contentHeight = window.innerHeight-110;
+          //window.innerHeight是浏览器可用高度，this.$refs.table.$el.offsetTop是表格距离浏览器可用高度顶部的距离
+        },
+        created() {
+          window.addEventListener('resize', this.setHeight);
+          this.setHeight();
+          this.usercount = this.$route.params.usercount;
+          // this.loadMusic();
+        },
+        methods:{
+            setHeight(){
+              this.conheight.height= window.innerHeight-110+"px";
+              this.contentHeight = window.innerHeight-110;
+            },
+            holdBack(){
+              this.$router.push({name:'main',params:{usercount: this.usercount}});
+            },
+            warning (nodesc) {
+              this.$Notice.warning({
+              title: 'Notification title',
+                  desc: nodesc ? '' : '提交内容不能为空！ '
+              });
+            },
+            changeContent(){
+              debugger
+              console.info(this.contentValue);
+              this.contentLenght = this.contentValue.length;
+            },
+            async submit() {
+                
+                if(this.contentValue == ''){
+                    this.warning();
+                    return;
+                }
 
-import aplayer from "vue-aplayer";
+                if(this.usercount == ''|| this.usercount == 0){
+                    
+                    this.$Modal.success({
+                        title: '',
+                        content: '用户无效!'
+                    });
+                    return;
+                }
+                
 
-export default {
-  name: "Aplayer",
-  props: ["pdfurl"],
-  components: {
-    //别忘了引入组件
-    aplayer: aplayer
-  },
-  data() {
-    return {
-      musicList: {
-        title: "youkao100",
-        author: "youkao100",
-        url: 'http://localhost:1122/static/ceshi.mp3',
-        pic: "",
-        lrc: ""
-      },
-      lrc: '',
-      url: '',
-      music: [],
-    //   title: '',
-      author: '',
-    };
-  },
-  
-  created() {
-    this.url = this.$route.query.music;
-    this.lrc = this.$route.query.lrc;
-    // this.title = this.$route.query.title;
-    this.author = this.$route.query.author;
 
-  },
+                let nowDate = this.getDate(0);
 
-  computed: {
-      title(){
-          return this.$route.query.title;
-      }
+                let postData={
+                userId : this.usercount,
+                note : this.contentValue,
+                content: this.contentValue,
+                date: nowDate
+                }
 
-  },
+                let { data } = await this.$axios.post(this.$apiTypes.SUBMIT_CONTENT, postData);
 
-  mounted() {
-    this.musicList = {
-      title: this.title,
-      author: this.author,
-      url: this.url,
-      pic: "",
-      lrc: this.lrc,
-    };
-  },
+                
+                if(data == 'success'){
 
-  methods: {
+                    this.$Modal.success({
+                        title: '',
+                        content: '提交成功!'
+                    });
 
-    player(url,lrc,title,author){
-      this.musicList = {
-        title: title,
-        author: author,
-        url: url,
-        pic: "",
-        lrc: lrc,
-      }; 
+                }
+                console.info(data);
 
-    },
+            },
+            getDate(n) {
 
-    async loadMusic() {
-        
-        let postData={
-            content: this.content,
-            relation: '',
-            token: ''
+              var ss = 24 * 60 * 60 * 1000; //一天的毫秒数86400
+
+              var timestamp = new Date().getTime(); //获取当前时间戳
+
+              var date1 = new Date(ss * n + timestamp) //加上n天的国际标准日期
+
+              var newTime = date1.toLocaleString(); //把日期转换成2018/6/4 下午10:45:19 格式
+
+              var arr = newTime.split(" "); //把2018/6/4提取出来
+
+              var arr2 = arr[0].split('/'); //把年月日数字单独提出来
+
+              return arr2[0] + '年' + arr2[1] + '月' + arr2[2] + '日'+' '+ arr[1]; //拼接成我们需要的格式返回
+
+            }
         }
-
-        let { data } = await this.$axios.post(this.$apiTypes.GET_MUSICS, postData);
-
-        
-        if(data != ''){
-
-            this.music = data.data.result;
-        }
-
-        console.info(data);
-
-    },
-
-
-  }
-};
+    }
 </script>
+<style>
+#app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 10px;
+}
+.ivu-progress {
+    display: inline-block;
+    width: 95%;
+    font-size: 12px;
+    position: relative;
+}
+</style>
