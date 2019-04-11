@@ -56,14 +56,7 @@
                 </Collapse>
                 </Scroll>
             </TabPane>
-            <TabPane label="TaskGraph" icon="logo-windows">    
-                <div style="height: 100px;">
-                    <Progress vertical :percent="25" />
-                    <Progress vertical :percent="45" status="active" />
-                    <Progress vertical :percent="65" status="wrong" />
-                    <Progress vertical :percent="100" />
-                    <Progress vertical :percent="25" hide-info />
-                </div>
+            <TabPane label="TaskGraph" icon="logo-windows">
                 <div style="height: 100px;">
                     <i-circle
                         :size="250"
@@ -87,7 +80,7 @@
         <Row :style="{height:'25px'}">
             <i-col span="8" style="padding-top:4px">&nbsp;</i-col>
             <i-col span="8" style="padding-top:4px">&nbsp;</i-col>
-            <i-col span="8" style="padding-top:4px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
+            <i-col span="8" style="padding-top:10px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
         </Row>
     </div>
 </template>

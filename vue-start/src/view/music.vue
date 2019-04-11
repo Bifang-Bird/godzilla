@@ -7,16 +7,37 @@
         <p>Some contents...</p>
     </Drawer>
         <Row :style="conheight">
-            <Progress :percent="contentLenght" stroke-width='15' status="active"></Progress>
-            <i-input v-model="contentValue" style="padding:5px;" type="textarea" :on-change="changeContent" :autosize="{minRows: 10,maxRows: 20}" placeholder="Enter something..."></i-input>
+            <i-col span="24">
+                <div class="layout">
+                    <Layout>
+                        <Content class="layout-content">
+                            <Card :style="conheight">
+                              <Progress :percent="contentLenght" stroke-width='15' status="active"></Progress>
+                              <i-input v-model="contentValue" style="padding:20px;" type="textarea" :on-change="changeContent" :autosize="{minRows: 10,maxRows: 20}" placeholder="Enter something..."></i-input>
+                                <div style="height: 100px;">
+                                  <i-circle
+                                      :size="220"
+                                      :trail-width="4"
+                                      :stroke-width="5"
+                                      :percent="contentLenght"
+                                      stroke-linecap="square"
+                                      stroke-color="#43a3fb">
+                                      <div class="demo-Circle-custom">
+                                          <h1>{{this.num}}</h1>
+                                          <p>录入字数</p>
+                                      </div>
+                                  </i-circle>
+                              </div>
+                            </Card>
+                        </Content>
+                    </Layout>
+                </div>
+            </i-col>
         </Row>
         <Row :style="{height:'25px'}">
-            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
-            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
-            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
-            <i-col span="4" style="padding-top:4px">&nbsp;</i-col>
-            <i-col span="4" style="padding-top:4px"><i-button @click="submit" shape="circle" size="large" icon="ios-checkmark"></i-button></i-col>
-            <i-col span="4" style="padding-top:4px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
+            <i-col span="8" style="padding-top:10px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
+            <i-col span="8" style="padding-top:4px">&nbsp;</i-col>
+            <i-col span="8" style="padding-top:10px"><i-button @click="submit" shape="circle" size="large" icon="ios-checkmark"></i-button></i-col>
         </Row>
 </div>
 </template>
@@ -33,16 +54,18 @@
                 usercount: '',
                 contentValue: '',
                 contentLenght: 0,
+                num: 0
             }
         },
         watch:{
           contentValue(val){
             this.contentLenght = this.contentValue.length/2;
+            this.num = this.contentValue.length;
           }
         },
         mounted() {
-          this.conheight.height= window.innerHeight-110+"px";
-          this.contentHeight = window.innerHeight-110;
+          this.conheight.height= window.innerHeight-120+"px";
+          this.contentHeight = window.innerHeight-120;
           //window.innerHeight是浏览器可用高度，this.$refs.table.$el.offsetTop是表格距离浏览器可用高度顶部的距离
         },
         created() {
@@ -53,8 +76,8 @@
         },
         methods:{
             setHeight(){
-              this.conheight.height= window.innerHeight-110+"px";
-              this.contentHeight = window.innerHeight-110;
+              this.conheight.height= window.innerHeight-120+"px";
+              this.contentHeight = window.innerHeight-120;
             },
             holdBack(){
               this.$router.push({name:'main',params:{usercount: this.usercount}});
@@ -71,14 +94,11 @@
               this.contentLenght = this.contentValue.length;
             },
             async submit() {
-                
                 if(this.contentValue == ''){
                     this.warning();
                     return;
                 }
-
                 if(this.usercount == ''|| this.usercount == 0){
-                    
                     this.$Modal.success({
                         title: '',
                         content: '用户无效!'
@@ -86,10 +106,7 @@
                     return;
                 }
                 
-
-
                 let nowDate = this.getDate(0);
-
                 let postData={
                 userId : this.usercount,
                 note : this.contentValue,
@@ -98,18 +115,13 @@
                 }
 
                 let { data } = await this.$axios.post(this.$apiTypes.SUBMIT_CONTENT, postData);
-
-                
                 if(data == 'success'){
-
                     this.$Modal.success({
                         title: '',
                         content: '提交成功!'
                     });
-
                 }
                 console.info(data);
-
             },
             getDate(n) {
 
@@ -138,7 +150,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .ivu-progress {
     display: inline-block;

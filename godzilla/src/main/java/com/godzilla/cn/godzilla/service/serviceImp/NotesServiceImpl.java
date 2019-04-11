@@ -23,8 +23,8 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public int update(String note, String content, long id) {
-        return notesMapper.update(note,content,id);
+    public int update(String note, String content,String state, long id) {
+        return notesMapper.update(note,content,state,id);
     }
 
     @Override

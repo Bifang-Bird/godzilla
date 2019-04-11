@@ -1,4 +1,4 @@
-<style scoped>
+<style>
     .layout{
         border: 1px solid #d7dde4;
         background: #f5f7f9;
@@ -41,14 +41,23 @@
                                 <p slot="extra">
                                     <Button @click="load" shape="circle" size="large" icon="ios-film-outline">加载</Button>
                                 </p>
-                                <Scroll :height = '600'>
-                                    <Row style="width:100%;text-align:left">
-                                        <Timeline>
-                                            <TimelineItem v-for="item,index in notes" :key="index">
-                                                <p class="time">{{item.date}}</p>
-                                                <p class="content">{{item.content}}</p>
-                                            </TimelineItem>
-                                        </Timeline>
+                                <Scroll :height = '750'>
+                                    <Row style="width:100%;text-align:left" v-for="item,index in notes" :key="index">
+                                    <Row>&nbsp;</Row>
+                                        <Col :span="3"> 
+                                            {{item.date}}
+                                        </Col>
+                                        <Col :span="19"> 
+                                            <Tooltip :content="item.content" placement="left" :max-width="200">
+                                                <Tag v-if="item.state=='0'" color="error">{{item.content}}</Tag>
+                                                <Tag v-else-if="item.state=='1'" color="success">{{item.content}}</Tag>
+
+                                            </Tooltip>
+
+                                        </Col>
+                                        <Col :span="2"> 
+                                            <i-button v-show="item.state=='0'" size="small" @click="holdupdate(item)" shape="circle" icon="ios-done-all"></i-button>
+                                        </Col>
                                     </Row>
                                 </Scroll>
                             </Card>
@@ -58,9 +67,9 @@
             </i-col>
         </Row>
         <Row :style="{height:'25px'}">
-            <i-col span="8" style="padding-top:4px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
-            <i-col span="8" style="padding-top:4px"><i-button size="large" @click="holdMusic" shape="circle" icon="ios-analytics"></i-button></i-col>
-            <i-col span="8" style="padding-top:4px"><i-button size="large" @click="holdTask" shape="circle" icon="ios-bookmarks-outline"></i-button></i-col>
+            <i-col span="8" style="padding-top:10px"><i-button size="large" @click="holdBack" shape="circle" icon="ios-arrow-back"></i-button></i-col>
+            <i-col span="8" style="padding-top:10px"><i-button size="large" @click="holdMusic" shape="circle" icon="ios-analytics"></i-button></i-col>
+            <i-col span="8" style="padding-top:10px"><i-button size="large" @click="holdTask" shape="circle" icon="ios-bookmarks-outline"></i-button></i-col>
         </Row>
     </div>
 </template>
@@ -105,6 +114,27 @@ export default {
     },
     holdMusic(){
         this.$router.push({name:'music',params:{usercount: this.userId}});
+    },
+
+    async holdupdate(item){
+        
+        let postData={
+            id: item.id,
+            note: item.note,
+            content: item.content,
+            state: '1'
+        };
+
+        let { data } = await this.$axios.post(this.$apiTypes.UPDATE_NOTES, postData);
+        debugger
+        if(data == 'success'){
+            this.$Message.info({
+                content: "已标注完成",
+                duration: 2
+            });
+            this.load();
+        }
+
     },
     //
     async submit() {
@@ -170,7 +200,7 @@ export default {
 
         let { data } = await this.$axios.get(this.$apiTypes.GET_NOTES+this.userId);
 
-        
+        debugger
         if(data != ''){
 
             this.notes = data;

@@ -8,6 +8,15 @@ public class Notes {
     public long userId;
     public String content;
     public String date;
+    public String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getNote() {
         return note;

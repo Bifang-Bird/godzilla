@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/': {
-        // target: "http://10.4.160.66:8081/",
-        target: "http://www.minidou.top:8080/",
+        target: "http://10.4.160.38:8081/",
+        // target: "http://www.minidou.top:8080/",
         changeOrigin: true,
         secure: false
       }

@@ -56,7 +56,7 @@ public class NoteController {
     })
     @RequestMapping(value="/updateNote", method=RequestMethod.POST)
     public String updateNote(@RequestBody Notes note) {
-        notesService.update(note.getNote(),note.getContent(),note.getId());
+        notesService.update(note.getNote(),note.getContent(),note.getState(),note.getId());
         return "success";
     }
 
