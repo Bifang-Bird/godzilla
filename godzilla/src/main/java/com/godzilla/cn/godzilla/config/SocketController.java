@@ -61,7 +61,7 @@ public class SocketController {
         int i = 0;
         if (!StringUtils.isEmpty(content)){
             SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
-            i = notesService.add(1,content,content,format.format(new Date()));
+            i = notesService.add(1,content,content,format.format(new Date()),"0");
         }
         messagingTemplate.convertAndSend("/topic/add", i);
 
