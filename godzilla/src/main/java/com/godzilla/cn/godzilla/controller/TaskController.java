@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,8 +36,12 @@ public class TaskController {
     @ApiOperation(value="创建任务", notes="")
     @ApiImplicitParam(name = "task", value = "", required = true, dataType = "JiraTask")
     @RequestMapping(value="/addTask", method=RequestMethod.POST)
-    public String addTask(@RequestBody JiraTask task) {
+    public String addTask(@Validated @RequestBody JiraTask task , BindingResult bindingResult) {
 
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult.getFieldError().getDefaultMessage());
+            return null;
+        }
         jiraTaskService.add(task);
         Result result = new Result();
         result.setCode(0);

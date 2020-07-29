@@ -1,10 +1,16 @@
 package com.godzilla.cn.godzilla.bean;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class JiraTask {
 
     public long id;
     public String issuekey;
+    @NotEmpty
     public String title;
+    @NotEmpty
     public String description;
     public String reaction;
     public String summary;
